@@ -106,8 +106,9 @@ async function aiGenerateNames(answers, opts = {}) {
       trademark: n.trademark || 'clear',
     }));
   } catch (e) {
-    return pickMockNames(Date.now(), count);
-  }
+  console.error('AI GENERATION FAILED:', e);
+  throw e;
+}
 }
 
 // ── useChatnamer hook ─────────────────────────────────────────────────
