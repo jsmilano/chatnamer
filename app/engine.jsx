@@ -99,7 +99,7 @@ async function aiGenerateNames(answers, opts = {}) {
     ].filter(Boolean).join('\n');
 const raw = await window.claude.complete(prompt);
 
-console.log('RAW DEPTH RESPONSE:', raw);
+console.log('RAW AI RESPONSE:', raw);
 
 let cleaned = raw
   .replace(/```json/g, '')
