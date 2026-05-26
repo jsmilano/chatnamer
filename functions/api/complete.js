@@ -25,8 +25,8 @@
  */
 
 // ── Hard server-side caps (clients cannot override) ─────────────────
-const ALLOWED_MODELS  = ['claude-3-5-sonnet-latest'];   // cheapest model only
-const DEFAULT_MODEL   = 'claude-3-5-sonnet-latest';
+const ALLOWED_MODELS  = ['claude-sonnet-4-20250514'];   // cheapest model only
+const DEFAULT_MODEL   = 'claude-sonnet-4-20250514';
 const MAX_TOKENS_OUT  = 700;                    // hard ceiling on output
 const DEFAULT_MAX_TOK = 700;
 const MAX_BODY_BYTES  = 8 * 1024;               // reject oversize requests
