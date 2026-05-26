@@ -245,9 +245,10 @@ function useChatnamer() {
         const m = raw && raw.match(/\{[\s\S]*\}/);
         if (m) depth = JSON.parse(m[0]);
       } catch (e) {
-  console.error('DEPTH LOAD FAILED:', e);
-  throw e;
-}
+        console.error('DEPTH LOAD FAILED:', e);
+        throw e;
+      }
+    }
     if (!depth) {
       // Mock fallback
       depth = {
