@@ -172,13 +172,18 @@ export async function onRequestPost(context) {
   }
 
   if (!apiRes.ok) {
-    // Don't leak Anthropic's full error detail to the client.
-    let status = apiRes.status;
-    // Map upstream rate limit / overload to 429 / 503 for the client.
-    if (status === 429) return json({ error: 'Upstream rate limited. Try again shortly.' }, 429);
-    if (status === 529) return json({ error: 'Upstream overloaded. Try again shortly.' }, 503);
-    return json({ error: 'Upstream error (' + status + ').' }, status);
-  }
+  let status = apiRes.status;
+  let detail = '';
+
+  try {
+    detail = await apiRes.text();
+  } catch (e) {}
+
+  return json({
+    error: 'Upstream error (' + status + ')',
+    detail
+  }, status);
+}
 
   let data;
   try { data = await apiRes.json(); } catch (_) {
