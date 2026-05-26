@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chatnamer v3 — Tanj.co reskin</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="app/v3/tokens.css">
+<style>
+  html, body { width: 100%; height: 100%; background: #0d0d0d; overflow: hidden; }
+  textarea::placeholder { color: rgba(26,26,26,0.35); font-family: var(--font-body); font-style: italic; }
+  .v3-on-dark textarea::placeholder { color: rgba(244,240,233,0.40); }
+  *::-webkit-scrollbar { width: 6px; height: 6px; }
+  *::-webkit-scrollbar-thumb { background: rgba(17,17,17,0.18); }
+  *::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Claude shim -->
+<script src="claude-shim.js"></script>
+
+<!-- Starter components -->
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<!-- v2 engine + question data (reused) -->
+<script type="text/babel" src="app/data.jsx"></script>
+<script type="text/babel" src="app/engine.jsx"></script>
+
+<!-- v2 support overlays (NameDetail/RefineBlock/SavedTray/ExportModal/useToast) -->
+<script type="text/babel" src="app/atoms.jsx"></script>
+<script type="text/babel" src="app/NameDetail.jsx"></script>
+
+<!-- v3 reskin -->
+<script type="text/babel" src="app/v3/atoms.jsx"></script>
+<script type="text/babel" src="app/v3/feedback.jsx"></script>
+<script type="text/babel" src="app/v3/DirectionE.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "showChips": true,
+    "density": "editorial",
+    "feedbackAfterSec": 90
+  }/*EDITMODE-END*/;
+
+  const ARTBOARD_W = 1440;
+  const ARTBOARD_H = 900;
+
+  function App() {
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+    return (
+      <>
+        <DesignCanvas
+          title="Chatnamer v3 · Tanj.co reskin"
+          subtitle="Editorial · condensed type · marquee ticker · spinning orange badge · timed feedback CTA"
+          logoSrc="assets/logo-orange.png">
+          <DCSection id="chatnamer-v3"
+            title="E · Tanj.co 2026 reskin"
+            subtitle={"Trade Gothic Cnd Bold (Saira Condensed) + Foundry Grotesk (DM Sans) + Mono (JetBrains Mono).  " +
+                      "Feedback modal fires after " + t.feedbackAfterSec + "s — or tap the spinning orange badge / nav button."}>
+            <DCArtboard id="dir-e" label="E · Tanj.co reskin"
+              width={ARTBOARD_W} height={ARTBOARD_H}>
+              <DirectionE width={ARTBOARD_W} height={ARTBOARD_H} tweaks={t}/>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="Conversation"/>
+          <TweakToggle label="Show guided chips"
+            value={t.showChips}
+            onChange={(v) => setTweak('showChips', v)}/>
+          <TweakRadio label="Density"
+            value={t.density}
+            options={['compact', 'editorial']}
+            onChange={(v) => setTweak('density', v)}/>
+
+          <TweakSection label="Feedback CTA"/>
+          <TweakSlider label="Auto-fire after (seconds)"
+            value={t.feedbackAfterSec} min={5} max={300} step={5}
+            onChange={(v) => setTweak('feedbackAfterSec', v)}/>
+          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, lineHeight: 1.5,
+                        color: 'rgba(17,17,17,0.65)', padding: '4px 4px 0' }}>
+            Fires once per page-load. Hit the orange badge or the "How's it going?"
+            button in the nav to trigger anytime.
+          </div>
+
+          <TweakSection label="About"/>
+          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, lineHeight: 1.55,
+                        color: 'rgba(17,17,17,0.7)', padding: '0 4px' }}>
+            Same conversational engine as Chatnamer v2-D, restyled for the 2026
+            Tanj.co direction: condensed-bold all-caps headlines, mono accents,
+            warm cream surface, editorial whitespace. Both thumbs paths land on
+            a Tanj contact CTA.
+          </div>
+        </TweaksPanel>
+      </>);
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+</body>
+</html>

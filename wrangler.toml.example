@@ -1,0 +1,13 @@
+# Wrangler config for local dev — rename to `wrangler.toml`.
+# Used only by `wrangler pages dev .` for previewing the Pages Function locally.
+
+name = "chatnamer"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "."
+
+# To enable the optional KV-based daily budget cap, uncomment and create the
+# namespace via:  wrangler kv:namespace create BUDGET_KV
+#
+# [[kv_namespaces]]
+# binding = "BUDGET_KV"
+# id      = "<id-from-the-create-command>"

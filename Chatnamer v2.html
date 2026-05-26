@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chatnamer v2 — Tanj</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  html, body { width: 100%; height: 100%; background: #1a1a1a; overflow: hidden; }
+  /* The design canvas does its own scaling. Disable selection on artboard chrome. */
+  textarea::placeholder { color: rgba(17,17,17,0.32); font-style: italic; }
+  .dark textarea::placeholder { color: rgba(245,242,238,0.32); }
+  /* Custom scrollbars inside artboards */
+  *::-webkit-scrollbar { width: 6px; height: 6px; }
+  *::-webkit-scrollbar-thumb { background: rgba(17,17,17,0.18); }
+  *::-webkit-scrollbar-track { background: transparent; }
+  .on-dark *::-webkit-scrollbar-thumb { background: rgba(245,242,238,0.18); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Claude shim: no-op inside the artifact preview (window.claude exists),
+     active in production (proxies to Cloudflare Pages Function). -->
+<script src="claude-shim.js"></script>
+
+<!-- Starter components -->
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<!-- App -->
+<script type="text/babel" src="app/data.jsx"></script>
+<script type="text/babel" src="app/engine.jsx"></script>
+<script type="text/babel" src="app/atoms.jsx"></script>
+<script type="text/babel" src="app/DirectionA.jsx"></script>
+<script type="text/babel" src="app/DirectionB.jsx"></script>
+<script type="text/babel" src="app/DirectionC.jsx"></script>
+<script type="text/babel" src="app/NameDetail.jsx"></script>
+<script type="text/babel" src="app/DirectionD.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "showChips": true,
+    "density": "editorial",
+    "accent": "orange"
+  }/*EDITMODE-END*/;
+
+  const ARTBOARD_W = 1280;
+  const ARTBOARD_H = 860;
+
+  function App() {
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+    return (
+      <>
+        <DesignCanvas title="Chatnamer v2"
+                      subtitle="3 directions · split-screen, guided conversation, live AI naming"
+                      logoSrc="assets/logo-orange.png">
+          <DCSection id="chatnamer-evolved"
+                     title="Chatnamer v2 — evolved direction"
+                     subtitle="Dark Hall room + Scroll Room intro. Orange accents.">
+            <DCArtboard id="dir-d" label="D · Dark Studio (combined)"
+                        width={ARTBOARD_W} height={ARTBOARD_H}>
+              <DirectionD width={ARTBOARD_W} height={ARTBOARD_H} tweaks={t}/>
+            </DCArtboard>
+          </DCSection>
+          <DCSection id="chatnamer-reference"
+                     title="Earlier directions — for reference"
+                     subtitle="The originals that fed into D.">
+            <DCArtboard id="dir-a" label="A · Studio Light"
+                        width={ARTBOARD_W} height={ARTBOARD_H}>
+              <DirectionA width={ARTBOARD_W} height={ARTBOARD_H} tweaks={t}/>
+            </DCArtboard>
+            <DCArtboard id="dir-b" label="B · Dark Hall (lime)"
+                        width={ARTBOARD_W} height={ARTBOARD_H}>
+              <DirectionB width={ARTBOARD_W} height={ARTBOARD_H} tweaks={t}/>
+            </DCArtboard>
+            <DCArtboard id="dir-c" label="C · Scroll Room"
+                        width={ARTBOARD_W} height={ARTBOARD_H}>
+              <DirectionC width={ARTBOARD_W} height={ARTBOARD_H} tweaks={t}/>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="Conversation"/>
+          <TweakToggle label="Show guided chips"
+                       value={t.showChips}
+                       onChange={(v) => setTweak('showChips', v)}/>
+          <TweakRadio  label="Density"
+                       value={t.density}
+                       options={['compact', 'editorial']}
+                       onChange={(v) => setTweak('density', v)}/>
+          <TweakSection label="About"/>
+          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, lineHeight: 1.55,
+                        color: 'rgba(17,17,17,0.7)', padding: '0 4px' }}>
+            Each artboard is a fully working prototype. Type into the brief; the names
+            generate live from Claude at the end. Open one fullscreen with the focus
+            button on its frame.
+          </div>
+        </TweaksPanel>
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+</body>
+</html>

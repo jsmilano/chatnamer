@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chatnamer — AI naming, by Tanj</title>
+<meta name="description" content="Chatnamer is an AI naming engine built by Tanj — the award-winning NYC-based naming agency. Eight questions, one sharp brief, ownable names.">
+<link rel="icon" href="assets/logo-orange.png">
+<meta property="og:title" content="Chatnamer — AI naming, by Tanj">
+<meta property="og:description" content="Eight questions. One sharp brief. Ownable names. Built by Tanj.">
+<meta property="og:image" content="assets/logo-orange.png">
+<meta name="theme-color" content="#1A1A1A">
+
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="app/v3/tokens.css">
+
+<style>
+  html, body {
+    width: 100%; height: 100%;
+    background: #1A1A1A;
+    overflow: hidden;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Scaling stage: fits a fixed 1440×900 artboard into any viewport,
+     letterboxing onto the dark background. */
+  #stage {
+    position: fixed; inset: 0;
+    background: #0d0d0d;
+  }
+  #artboard {
+    position: absolute; left: 50%; top: 50%;
+    width: 1440px; height: 900px;
+    transform-origin: center center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    background: var(--v3-cream, #F4F0E9);
+  }
+  textarea::placeholder { color: rgba(26,26,26,0.35); font-family: var(--font-body); font-style: italic; }
+  .v3-on-dark textarea::placeholder { color: rgba(244,240,233,0.40); }
+
+  /* Mobile fallback: under 720px wide, show the experience full-bleed (still scaled) */
+  @media (max-width: 720px) {
+    #artboard { box-shadow: none; }
+  }
+
+  /* Small attribution chip in the letterbox area */
+  .stage-attribution {
+    position: fixed; bottom: 14px; right: 18px;
+    z-index: 50; pointer-events: auto;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: rgba(244,240,233,0.55);
+  }
+  .stage-attribution a {
+    color: inherit; text-decoration: none;
+    border-bottom: 1px solid rgba(244,240,233,0.35);
+    transition: color .18s ease, border-color .18s ease;
+  }
+  .stage-attribution a:hover { color: #E54B2A; border-bottom-color: #E54B2A; }
+
+  /* Loading splash */
+  #splash {
+    position: fixed; inset: 0; display: grid; place-items: center;
+    background: #0d0d0d; color: #F4F0E9; z-index: 200;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: opacity .35s ease;
+  }
+  #splash.hide { opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="splash">Chatnamer · loading</div>
+
+<div id="stage">
+  <div id="artboard">
+    <div id="root" style="width:100%;height:100%;"></div>
+  </div>
+</div>
+
+<div class="stage-attribution">
+  Chatnamer · Created by
+  <a href="https://tanj.co" target="_blank" rel="noopener">Tanj</a>
+</div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Claude shim — installs window.claude.complete that POSTs /api/complete -->
+<script src="claude-shim.js"></script>
+
+<!-- v2 engine + question data (reused) -->
+<script type="text/babel" src="app/data.jsx"></script>
+<script type="text/babel" src="app/engine.jsx"></script>
+
+<!-- v2 support overlays (NameDetail / RefineBlock / SavedTray / ExportModal / useToast) -->
+<script type="text/babel" src="app/atoms.jsx"></script>
+<script type="text/babel" src="app/NameDetail.jsx"></script>
+
+<!-- v3 reskin -->
+<script type="text/babel" src="app/v3/atoms.jsx"></script>
+<script type="text/babel" src="app/v3/feedback.jsx"></script>
+<script type="text/babel" src="app/v3/DirectionE.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+  const ARTBOARD_W = 1440;
+  const ARTBOARD_H = 900;
+
+  /* Scale-to-fit the artboard inside any viewport */
+  function fitStage() {
+    const ab = document.getElementById('artboard');
+    if (!ab) return;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const scale = Math.min(vw / ARTBOARD_W, vh / ARTBOARD_H);
+    ab.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  }
+  window.addEventListener('resize', fitStage);
+  fitStage();
+
+  function App() {
+    // Production tweaks — fixed, no panel.
+    const tweaks = {
+      showChips: true,
+      density: 'editorial',
+      feedbackAfterSec: 120,   // CTA modal fires 2 minutes in
+    };
+    return <DirectionE width={ARTBOARD_W} height={ARTBOARD_H} tweaks={tweaks}/>;
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+  // Hide splash once the first frame paints.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const s = document.getElementById('splash');
+      if (s) {
+        s.classList.add('hide');
+        setTimeout(() => s.remove(), 400);
+      }
+      fitStage();
+    });
+  });
+</script>
+
+</body>
+</html>

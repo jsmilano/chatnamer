@@ -1,0 +1,21 @@
+# Cloudflare Pages headers config — applied per-path.
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+
+# ─ Site-wide security headers ────────────────────────────────
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# ─ API: never cache, never frame ─────────────────────────────
+/api/*
+  Cache-Control: no-store
+  X-Frame-Options: DENY
+
+# ─ Static assets: long cache ────────────────────────────────
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/app/*
+  Cache-Control: public, max-age=86400

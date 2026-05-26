@@ -1,0 +1,198 @@
+/* ============================================================
+   Tanj Design System — Colors & Type
+   v2.1 · 2026
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ---------- BASE COLOR TOKENS ---------- */
+  --black:        #111111;
+  --off-white:    #F5F2EE;
+  --warm-white:   #FAF8F5;
+  --orange:       #FF461C;   /* Signal accent — ONE use per layout */
+  --lime:         #C8F55A;   /* Secondary accent — ONE use per layout */
+  --ink:          #434145;   /* Body copy on light bg */
+  --divider:      #DEDBD7;
+  --dark-blue:    #033064;   /* Editorial emphasis */
+  --sand:         #EEECE8;   /* Soft section fill */
+
+  /* ---------- SEMANTIC COLOR TOKENS ---------- */
+  --bg:           var(--off-white);
+  --bg-lifted:    var(--warm-white);
+  --bg-soft:      var(--sand);
+  --bg-hero:      var(--black);
+  --bg-callout:   var(--dark-blue);
+
+  --fg1:          var(--black);     /* primary text on light */
+  --fg2:          var(--ink);       /* body text on light */
+  --fg-muted:     rgba(17,17,17,0.35);
+  --fg-on-dark1:  var(--off-white);
+  --fg-on-dark2:  rgba(245,242,238,0.72);
+
+  --rule:         var(--divider);
+  --rule-dark:    rgba(245,242,238,0.10);
+  --rule-light:   rgba(17,17,17,0.10);
+
+  --accent-1:     var(--orange);
+  --accent-2:     var(--lime);
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body:    'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* No third typeface. Ever. */
+
+  /* ---------- TYPE SCALE (raw) ---------- */
+  --fs-display-xl: clamp(72px, 9vw, 110px);
+  --fs-display-lg: clamp(60px, 7vw, 96px);
+  --fs-headline:   clamp(36px, 4.5vw, 60px);
+  --fs-subhead:    clamp(20px, 2vw, 28px);
+  --fs-stat:       clamp(48px, 5.5vw, 72px);
+  --fs-body-lg:    16px;
+  --fs-body:       15px;
+  --fs-body-sm:    14px;
+  --fs-label:      11px;
+  --fs-label-sm:   10px;
+
+  /* ---------- LINE HEIGHT ---------- */
+  --lh-display:    0.95;
+  --lh-tight:      1.05;
+  --lh-snug:       1.15;
+  --lh-body:       1.65;
+
+  /* ---------- TRACKING ---------- */
+  --track-label:   0.12em;
+  --track-label-tight: 0.10em;
+  --track-label-wide:  0.14em;
+
+  /* ---------- SPACING ---------- */
+  --space-xs:  8px;
+  --space-sm:  16px;
+  --space-md:  32px;
+  --space-lg:  64px;
+  --space-xl:  120px;
+
+  /* ---------- BORDERS ---------- */
+  --bw-hair:   1px;
+  --bw-rule:   1.5px;
+  --bw-strong: 2px;
+  --radius:    0;            /* SQUARE corners. Always. */
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+html, body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   SEMANTIC TYPE — apply via class or element
+   ============================================================ */
+
+.t-display, h1.t-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-display-xl);
+  line-height: var(--lh-display);
+  letter-spacing: 0;
+  color: inherit;
+}
+.t-display--italic { font-style: italic; }
+
+.t-headline, h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-headline);
+  line-height: var(--lh-tight);
+  letter-spacing: 0;
+}
+
+.t-subhead, h3 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-subhead);
+  line-height: var(--lh-snug);
+  letter-spacing: 0;
+}
+
+.t-body, p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg2);
+  text-align: left;          /* body is ALWAYS left-aligned */
+  text-wrap: pretty;
+}
+
+.t-body-lg { font-size: var(--fs-body-lg); }
+.t-body-sm { font-size: var(--fs-body-sm); }
+
+.t-label, .kicker {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-label-sm);
+  letter-spacing: var(--track-label-wide);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.t-stat {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--fs-stat);
+  line-height: var(--lh-tight);
+  color: var(--accent-1);
+}
+
+.t-pull {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(22px, 3.5vw, 36px);
+  line-height: 1.15;
+  border-left: 3px solid var(--accent-2);
+  padding-left: 22px;
+  max-width: 520px;
+}
+
+/* On dark surfaces */
+.on-dark { color: var(--fg-on-dark1); background: var(--bg-hero); }
+.on-dark p, .on-dark .t-body { color: var(--fg-on-dark2); }
+.on-dark .t-label, .on-dark .kicker { color: var(--accent-2); }
+
+/* On orange / lime accent surfaces — text stays black */
+.on-orange { background: var(--accent-1); color: var(--black); }
+.on-lime   { background: var(--accent-2); color: var(--black); }
+
+/* ============================================================
+   LINKS — underline reveal, no scale
+   ============================================================ */
+a, .hover-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+a:hover, .hover-link:hover { border-bottom-color: var(--accent-1); }
+
+/* ============================================================
+   ENTRANCE ANIMATION — one per section
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.a1 { animation: fadeUp 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+.a2 { animation: fadeUp 0.45s 0.08s cubic-bezier(0.16,1,0.3,1) both; }
+.a3 { animation: fadeUp 0.45s 0.16s cubic-bezier(0.16,1,0.3,1) both; }
+.a4 { animation: fadeUp 0.45s 0.24s cubic-bezier(0.16,1,0.3,1) both; }

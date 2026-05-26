@@ -1,0 +1,119 @@
+/* ============================================================
+   Tanj.co reskin — Chatnamer v3 tokens
+   Display: Saira Condensed (subs for Trade Gothic Cnd Bold)
+   Body:    DM Sans (subs for Foundry Grotesk)
+   Mono:    JetBrains Mono (subs for Foundry Grotesk Mono)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+.v3-scope {
+  /* Map old vars → new families so reused atoms inherit the new look */
+  --font-display: 'Saira Condensed', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Slightly warmer cream than v2, matches the snapshots */
+  --v3-cream:     #F4F0E9;
+  --v3-cream-2:   #EDE7DD;     /* deeper section fill */
+  --v3-ink:       #1A1A1A;
+  --v3-rule:      rgba(26,26,26,0.10);
+  --v3-rule-2:    rgba(26,26,26,0.20);
+  --v3-muted:     rgba(26,26,26,0.55);
+  --v3-orange:    #E54B2A;     /* tuned to the snapshot — slightly toastier than #FF461C */
+
+  font-family: var(--font-body);
+  color: var(--v3-ink);
+  background: var(--v3-cream);
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Italic emphasis in old atoms → tasteful mono italic instead of Georgia */
+.v3-scope em {
+  font-family: var(--font-mono);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Marquee ticker */
+@keyframes v3-ticker {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.v3-ticker-track {
+  display: inline-flex;
+  gap: 0;
+  white-space: nowrap;
+  animation: v3-ticker 60s linear infinite;
+}
+
+/* Slow rotating badge */
+@keyframes v3-spin {
+  to { transform: rotate(360deg); }
+}
+.v3-spin {
+  animation: v3-spin 22s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Dialog enter — preserves translate(-50%, -50%) centering */
+@keyframes v3-dialog-in {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 14px)); }
+  to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* Simple opacity fade for full-bleed scrims */
+@keyframes v3-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Fade up on mount */
+@keyframes v3-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.v3-up { animation: v3-up .55s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* Subtle "live" pulse — a single orange dot that breathes */
+@keyframes v3-pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229,75,42,0.45); opacity: 1; }
+  50%      { box-shadow: 0 0 0 6px rgba(229,75,42,0);    opacity: 0.85; }
+}
+.v3-pulse-dot {
+  display: inline-block;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--v3-orange);
+  animation: v3-pulse-dot 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  flex: 0 0 auto;
+}
+
+/* Marquee tape — slow draw-in underline for the headline */
+@keyframes v3-rule-draw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.v3-rule-draw {
+  display: block; height: 2px; background: var(--v3-orange);
+  transform-origin: left center;
+  animation: v3-rule-draw 1.1s .35s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* Caret + selection use the orange */
+.v3-scope textarea, .v3-scope input { caret-color: var(--v3-orange); }
+.v3-scope ::selection { background: var(--v3-orange); color: var(--v3-cream); }
+
+/* Hairline scrollbars inside the v3 scope */
+.v3-scope *::-webkit-scrollbar { width: 6px; height: 6px; }
+.v3-scope *::-webkit-scrollbar-thumb { background: rgba(26,26,26,0.18); }
+.v3-scope .v3-on-dark *::-webkit-scrollbar-thumb { background: rgba(244,240,233,0.20); }
+.v3-scope *::-webkit-scrollbar-track { background: transparent; }
+
+/* Hover underline reveal for inline links — orange */
+.v3-scope a.v3-link {
+  color: inherit; text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: color .18s ease, border-color .18s ease;
+}
+.v3-scope a.v3-link:hover { color: var(--v3-orange); border-bottom-color: var(--v3-orange); }
