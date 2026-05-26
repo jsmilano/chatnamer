@@ -97,19 +97,16 @@ async function aiGenerateNames(answers, opts = {}) {
     brief,
     refinementBlock,
     ].filter(Boolean).join('\n');
-    const raw = await window.claude.complete(prompt);
-    const m = raw && raw.match(/\{[\s\S]*\}/);
-    if (!m) throw new Error('no json');
-    const parsed = JSON.parse(m[0]);
-    if (!parsed.names || !parsed.names.length) throw new Error('no names');
-    return parsed.names.map((n, i) => ({
-      name: n.name,
-      kind: n.kind || 'Coined',
-      etymology: n.etymology || '',
-      rationale: n.rationale || '',
-      domain: n.domain || { com: i % 3 === 0 ? 'taken' : 'open', alt: '' },
-      trademark: n.trademark || 'clear',
-    }));
+const raw = await window.claude.complete(prompt);
+
+console.log('RAW DEPTH RESPONSE:', raw);
+
+let cleaned = raw
+  .replace(/```json/g, '')
+  .replace(/```/g, '')
+  .trim();
+
+depth = JSON.parse(cleaned);
   } catch (e) {
   console.error('AI GENERATION FAILED:', e);
   throw e;
