@@ -106,7 +106,23 @@ let cleaned = raw
   .replace(/```/g, '')
   .trim();
 
-depth = JSON.parse(cleaned);
+const parsed = JSON.parse(cleaned);
+
+if (!parsed.names || !parsed.names.length) {
+  throw new Error('no names returned');
+}
+
+return parsed.names.map((n, i) => ({
+  name: n.name,
+  kind: n.kind || 'Coined',
+  etymology: n.etymology || '',
+  rationale: n.rationale || '',
+  domain: n.domain || {
+    com: i % 3 === 0 ? 'taken' : 'open',
+    alt: ''
+  },
+  trademark: n.trademark || 'clear',
+}));
   } catch (e) {
   console.error('AI GENERATION FAILED:', e);
   throw e;
