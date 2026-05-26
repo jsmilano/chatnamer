@@ -26,12 +26,10 @@
 
 // ── Hard server-side caps (clients cannot override) ─────────────────
 const ALLOWED_MODELS = [
-  'claude-3-haiku-20240307',
-  'claude-sonnet-4-20250514',
-  'claude-opus-4-1'
+  'claude-sonnet-4-20250514'
 ];
 
-const DEFAULT_MODEL = 'claude-3-haiku-20240307';
+const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
 const MAX_TOKENS_OUT  = 1200;                    // hard ceiling on output
 const DEFAULT_MAX_TOK = 1200;
 const MAX_BODY_BYTES  = 8 * 1024;               // reject oversize requests
