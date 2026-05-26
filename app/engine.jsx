@@ -51,9 +51,14 @@ async function aiGenerateChips(question, answers) {
       'Hint: ' + (question.hint || ''),
     ].join('\n');
     const raw = await window.claude.complete(prompt);
-    const m = raw && raw.match(/\{[\s\S]*\}/);
-    if (!m) return null;
-    const parsed = JSON.parse(m[0]);
+     console.log('RAW AI RESPONSE:', raw);
+     
+     let cleaned = raw
+        .replace(/```json/g, '')
+        .replace(/```/g, '')
+        .trim();
+     
+     const parsed = JSON.parse(cleaned);
     if (Array.isArray(parsed.chips)) return parsed.chips.slice(0, 3).filter(Boolean);
   } catch (e) { /* swallow */ }
   return null;
