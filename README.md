@@ -1,4 +1,4 @@
-# Chatnamer · Deployment guide
+# Chatnamer · Deployment guide 
 
 An editorial AI naming engine built on the Tanj design system.
 Production deploy targets **GitHub** (source) + **Cloudflare Pages** (host +
