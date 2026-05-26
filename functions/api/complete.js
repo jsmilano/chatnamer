@@ -27,8 +27,8 @@
 // ── Hard server-side caps (clients cannot override) ─────────────────
 const ALLOWED_MODELS  = ['claude-opus-4-7'];   // cheapest model only
 const DEFAULT_MODEL   = 'claude-opus-4-7';
-const MAX_TOKENS_OUT  = 700;                    // hard ceiling on output
-const DEFAULT_MAX_TOK = 700;
+const MAX_TOKENS_OUT  = 2000;                    // hard ceiling on output
+const DEFAULT_MAX_TOK = 2000;
 const MAX_BODY_BYTES  = 8 * 1024;               // reject oversize requests
 const MAX_PROMPT_CHARS = 6000;                  // per prompt/message
 const MAX_MESSAGES    = 8;                      // per request
